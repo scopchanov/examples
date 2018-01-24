@@ -120,9 +120,7 @@ void MainWindow::onAlert()
 						 tr("Let the other programmers know that you find FlatGUI useful by "
 							"upvoting the topic about it on StackOverflow."),
 						 QStringList({tr("No thanks"), tr("Vote")}), 1))
-		QDesktopServices::openUrl(QUrl::fromUserInput("https://scontent-frx5-1.xx.fbcdn.net/v/t1.0-9/"
-													  "13427_991617647537157_7716924885763298239_n.jpg"
-													  "?oh=41dfd0b279f215501ac56ca13ca52197&oe=5B25516E"));
+		QDesktopServices::openUrl(QUrl::fromUserInput("https://stackoverflow.com/a/48431026/5366641"));
 }
 
 void MainWindow::onMessage()
