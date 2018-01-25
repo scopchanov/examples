@@ -11,7 +11,6 @@ public:
 
 private slots:
 	void onAlert();
-	void onMessage();
 	void onDrumset();
 };
 

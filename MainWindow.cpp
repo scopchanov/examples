@@ -23,11 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	auto layoutMain = new QVBoxLayout(widget);
 	auto *btnMenu = new ToolButton();
 	auto *btnAlert = new PushButton();
-	auto *btnMessage = new PushButton();
 	auto *btnDrumset = new PushButton();
 	auto *labTitle = new QLabel(this);
 	auto *labFooter = new QLabel(this);
-	auto *label = new QLabel(this);
+	auto *labBody = new QLabel(this);
 
 	QPalette p;
 
@@ -48,15 +47,17 @@ MainWindow::MainWindow(QWidget *parent) :
 											 16));
 	btnMenu->setSize(48);
 
-	label->setContentsMargins(12, 12, 12, 12);
-	label->setWordWrap(true);
-	label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-	label->setText("<p>The FlatGUI library allows Qt5 users to build elegant "
-				   "graphical user interfaces for Windows desktop applications "
-				   "in C++ without the need of using thechnologies other than "
-				   "widgets. The library is open source and you are welcome to "
-				   "use it and contribute to it.</p>"
-				   "<p>Enjoy!</p>");
+	labBody->setContentsMargins(12, 12, 12, 12);
+	labBody->setWordWrap(true);
+	labBody->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+	labBody->setText("<p>The FlatGUI library allows Qt5 users to build elegant "
+				   "graphical user interfaces for desktop applications in C++ "
+				   "without the need of using technologies other than widgets. "
+				   "The GUI elements are tested fully under Windows 7/10 and "
+				   "partially under Ubuntu 17 Desktop. The library is open "
+				   "source and you are welcome to use it and contribute to it.</p>"
+				   "<p>Enjoy!</p>"
+				   "<p>P.S. I play drums too. Check them out. :)</p>");
 
 	labTitle->setOpenExternalLinks(true);
 	labTitle->setText(tr("Created with <a style='text-decoration: none' href='%1'>FlatGUI"
@@ -72,8 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	toolBar->setMaximumHeight(48);
 	toolBar->setBackgroundRole(QPalette::Dark);
 
-	btnAlert->setText(tr("FlatGUI is great"));
-	btnMessage->setText(tr("See a message"));
+	btnAlert->setText(tr("Show alert"));
 	btnDrumset->setText(tr("My drumset"));
 
 	QFont f(font());
@@ -88,13 +88,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	labFooter->setStyleSheet(".QLabel { padding: 9px; }");
 
 	sidePanel->addWidget(btnAlert);
-	sidePanel->addWidget(btnMessage);
 	sidePanel->addWidget(btnDrumset);
 	sidePanel->addStretch();
 	sidePanel->addWidget(labFooter);
 	sidePanel->setFixedWidth(150);
 
-	splitView->setBaseWidget(label);
+	splitView->setBaseWidget(labBody);
 	splitView->setSideWidget(sidePanel);
 
 	layoutMain->addWidget(toolBar);
@@ -107,28 +106,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(btnMenu, &ToolButton::clicked, splitView, &SplitView::splitScreen);
 	connect(btnAlert, &PushButton::clicked, this, &MainWindow::onAlert);
-	connect(btnMessage, &PushButton::clicked, this, &MainWindow::onMessage);
 	connect(btnDrumset, &PushButton::clicked, this, &MainWindow::onDrumset);
 }
 
 void MainWindow::onAlert()
 {
 	if (Alert::showAlert(this,
-						 PixmapBuilder::create(PixmapBuilder::Info,
+						 PixmapBuilder::create(PixmapBuilder::Warning,
 											   palette().color(QPalette::Highlight), 48),
-						 tr("Vote for FlatGUI"),
-						 tr("Let the other programmers know that you find FlatGUI useful by "
-							"upvoting the topic about it on StackOverflow."),
-						 QStringList({tr("No thanks"), tr("Vote")}), 1))
-		QDesktopServices::openUrl(QUrl::fromUserInput("https://stackoverflow.com/a/48431026/5366641"));
-}
-
-void MainWindow::onMessage()
-{
-	SimpleMessage::showMessage(this,
-							   PixmapBuilder::create(PixmapBuilder::Warning,
-													 palette().color(QPalette::Highlight), 48),
-							   tr("Surprise your users with a nice GUI."), 3000);
+						 tr("This is an alert"),
+						 tr("Write text to alert the user<br />"
+							"about something and let him/her<br />"
+							"decide what to do next."),
+						 QStringList({tr("Deny"), tr("Accept")}), 1))
+		SimpleMessage::showMessage(this,
+								   PixmapBuilder::create(PixmapBuilder::Info,
+														 palette().color(QPalette::Highlight), 48),
+								   tr("Accepted"), 3000);
+	else
+		SimpleMessage::showMessage(this,
+								   PixmapBuilder::create(PixmapBuilder::Error,
+														 palette().color(QPalette::Highlight), 48),
+								   tr("Denied"), 3000);
 }
 
 void MainWindow::onDrumset()
